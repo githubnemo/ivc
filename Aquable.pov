@@ -7,9 +7,9 @@
 #local Radius = 0.02;
 #local DeskHeight = Height + 1.027;
 
-camera{location <0,2.9,-4> look_at <0,0,0> angle 0}
+camera{location <0,2.7,-3> look_at <0,0,0> angle 0}
 
-light_source{<0,10,0> color White*0.4}
+light_source{<0,10,0> color White*0.9}
 
 background{White}
 
@@ -71,7 +71,7 @@ union{
 
 //Paper
 object {
-	Paper(1)
+	Paper(1,0)
 	translate <0, DeskHeight-0.035, 0>
 }
 // Axis
@@ -94,7 +94,15 @@ union {
 	}
 }
 
+#local DrawingHeight = DeskHeight - 0.03;
 
 //Fish - 2D
-Fish2d(-6,0,0,0,10*sin(clock))
-Fish2d(0,-5,0,180,10*sin(clock))
+object {
+	Fish2d(10*sin(clock))
+	translate <0,DrawingHeight,-0.1>
+}
+object {
+	Fish2d(20*sin(clock))
+	rotate <180,0,180>
+	translate <0,DrawingHeight,-0.2>
+}

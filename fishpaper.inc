@@ -1,7 +1,8 @@
 #include "glass.inc"
+#include "functions.inc"
 
-// Position <X,Y,Z>, angle A, fin angle FA
-#macro Fish2d(X,Y,Z,A,FA)
+// fin angle FA
+#macro Fish2d(FA)
 	union {
 	#declare Radius=2;
 	#declare Thickness=0.2;
@@ -11,75 +12,71 @@
 	// Body
 	difference {
 		cylinder {
-			<0,0,Thickness>,<0,0,0>
+			<0,0,0>,<0,Thickness,0>
 			Radius
 		}
 		cylinder {
-			<0,0,Thickness>,<0,0,0>
+			<0,0,0>,<0,Thickness,0>
 			Radius-Thickness
 			open
 		}
-		scale <XSquish,0.4,1>
+		scale <XSquish,1,0.4>
 	}
 
 	// Fin
 	union {
 		box {
-			<0,0,Thickness>, <FinSide,Thickness,0>
-			rotate <0,0,90>
+			<0,0,0>, <FinSide,Thickness,Thickness>
+			rotate -90*y
 		}
 		box {
-			<0,0,Thickness>, <FinSide-Thickness,Thickness,0>
+			<0,0,0>, <FinSide-Thickness,Thickness,Thickness>
 		}
 		box {
-			<Thickness,0,Thickness>, <sqrt(FinSide*FinSide+FinSide*FinSide),Thickness,0>
-			rotate <0,0,90+45>
+			<Thickness,Thickness,0>, <sqrt(FinSide*FinSide+FinSide*FinSide),Thickness,Thickness>
+			rotate -(90+45)*y
 			translate <FinSide,0,0>
 		}
-		rotate <0,0,-45>
-		rotate FA*y
-		translate <Radius*XSquish,-0.15,0>
+		rotate 45*y
+		rotate FA*z
+		translate <Radius*XSquish,0,0>
 		no_shadow
 	}
-
-	rotate <0,0,A>
-	translate <X,Y,Z>
+	scale 0.04
 }
 #end
 
-#macro Paper(Width)
+#declare RMF=function{ f_ridged_mf(x, y, z, 0.07, 2.2,  7, 0.6, 0.9, 1)}
+
+// Paper side width `Width`, use reflection flag `R`
+#macro Paper(Width,R)
 	union {
-	box {
-		<0,0.01,0>, <Width,0.01,Width/sqrt(2)>
-		pigment { White }
-		normal { bumps 0.1 }
+
+		box {
+			<0,0.01,0>, <Width,0.01,Width/sqrt(2)>
+			pigment { White }
+			normal { bumps 0.1 }
+		}
+
+		#if (R = 1)
+		box {
+			<0,0.01,0>, <Width,0.015,Width/sqrt(2)>
+			material {
+				texture {
+					pigment { color Col_Glass_Clear }
+					finish { F_Glass6 }
+				}
+				interior {
+					I_Glass_Exp(2)
+					fade_color color rgb <0.85, 0.85, 0.85>
+				}
+			}
+			normal {
+				function { RMF(x, y, z) } 1.3
+				scale 0.2
+			}
+		}
+		#end
+		translate <-Width/2,0,-Width/sqrt(2)/2>
 	}
-	//box {
-		//<0,0,-0.01>, <Width,Width/sqrt(2),-0.01>
-		//material {
-			//texture {
-				//pigment { color Col_Glass_Clear }
-				//finish { F_Glass6 }
-			//}
-			//interior {
-				//I_Glass_Exp(2)
-				//fade_color color rgb <0.35, 0.65, 0.85>
-			//}
-		//}
-	//}
-	translate <-Width/2,0,-Width/sqrt(2)/2>
-	//plane { z, 0
-		//translate <0,0,0.1>
-		//hollow on
-		//pigment { White }
-	//}
-	//plane { <0,0,1>, 10
-		//hollow on
-		//pigment { White filter 1 }
-		//finish {reflection 0.1 }
-		//interior { ior 1.1 caustics 1.0 }
-		//translate <0, 0, -10>
-////		normal { bumps 0.5 }
-	//}
-}
 #end
