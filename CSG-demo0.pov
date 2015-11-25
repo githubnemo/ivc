@@ -72,6 +72,23 @@ spline {
    13, < 1, 0, 0>, // control point
 }
 
+#declare Fish2Path =
+spline {
+   cubic_spline
+   #declare zoff=0.1;
+
+   -2, <0, 0.5, 0>, // control point
+   -1, <0, 0, 0>, // control point
+
+   00, < -0.1, -0.2, zoff>, // start
+   01, < -0.25, 0.1, zoff>,
+   02, < -0.3, 0.3, zoff>, // highest point
+   03, < -0.35, 0.1, zoff>,
+   04, < -0.5, -0.2, zoff>,
+
+   12, < 1, 1, 0>, // control point
+   13, < 1, 0, 0>, // control point
+}
 
 // The yellow wire that shows the spline path.
 union {
@@ -90,13 +107,36 @@ union {
    pigment {color <1,1,0>}
 }
 
+// The blue wire that shows the spline path.
+union {
+   #declare C = 0;
+   #declare Cmax= 50;
+   #declare dv = 5;
+   #while (C<=Cmax)
+      #declare Value1 = C/Cmax*dv;
+      #declare Value2 = (C+1)/Cmax*dv;
+      #declare Point1 = Fish2Path(Value1);
+      #declare Point2 = Fish2Path(Value2);
+      sphere {Point1, 0.015}
+      cylinder {Point1, Point2, 0.01}
+      #declare C = C+1;
+   #end
+   pigment {color <0,0,1>}
+}
 // Spline_Trans (Spline, Time, SkyVector, ForeSight, Banking)
 
 object {
 	Fish3d
 //	sphere { <0,0,0> 0.1 }
 	rotate 90*y
+	Spline_Trans(MySpline, clock, z, 0.5, 0.5)
+}
+
+object {
+	Fish3d
+//	sphere { <0,0,0> 0.1 }
+	rotate 90*y
 	rotate 90*z
-	Spline_Trans(MySpline, clock+3, z, 0.5, 0.5)
+	Spline_Trans(Fish2Path, clock, z, 0.5, 0.5)
 }
 
