@@ -158,7 +158,9 @@ spline {
    01, < 0.25, yoff+1.125, zoff>,
    02, < 0.5, yoff+1.5, zoff>, // highest point
    03, < 0.75, yoff+1.125, zoff>,
-   04, < 1, yoff+-0.2, zoff>, // end
+//   04, < 1, yoff+-0.2, zoff>, // end
+   04, <Width/1.1,Height+1.11,-Width/2>
+
 
    12, < 0, 1, 0>, // control point
    13, < 0, 0, 0>, // control point
@@ -307,7 +309,7 @@ object {
 object {
 	Fish3d
 	rotate 90*y
-	Spline_Trans(Fish1Path, 0.15*max(Scene2Clock-15, 0), z, 0.5, 0.5)
+	Spline_Trans(Fish1Path, 0.35*max(Scene2Clock-15, 0), z, 0.5, 0.5)
 }
 
 // Lower fish

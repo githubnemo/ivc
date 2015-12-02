@@ -94,7 +94,7 @@ finish {
 	#declare SideFinAngle = 10 * sin(2*clock);
 
 	// Waggle the tail. -15..15 looks good.
-	#declare TailFinAngle = -15 + 30*sin(2*clock);
+	#declare TailFinAngle = -10 + 20*sin(2*clock);
 
 	#declare FishColor = <0,0.7,1>;
 
