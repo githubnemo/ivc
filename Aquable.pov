@@ -220,8 +220,8 @@ object {
 	Fish2d(10*sin(clock))
 	translate <0.5,DrawingHeight,0.1>
 	translate -0.07*max(Scene1Clock,0)*x
-	translate -0.1*max(Scene2Clock-Scene1Clock,0)*x
-	#if (Scene2Clock >= 20)
+	translate -0.03*max(Scene2Clock,0)*x
+	#if (Scene2Clock >= 3 & Scene2Clock < 4)
 		pigment { color rgbt <1, 1, 1, 1> }
 		no_shadow
 	#end
