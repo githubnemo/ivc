@@ -141,8 +141,8 @@ union {
 
 #local DrawingHeight = DeskHeight - 0.03;
 
-#declare Scene2Clock = (clock - TitleTime);
-
+#declare Scene1Clock = (clock - TitleTime);
+#declare Scene2Clock = (clock - TopViewElapseTime+FadingOffset);
 
 #declare Fish1Path =
 spline {
@@ -218,9 +218,10 @@ union {
 //Fish - 2D
 object {
 	Fish2d(10*sin(clock))
-	translate <0.1,DrawingHeight,0.1>
-	translate -0.1*Scene2Clock*x
-	#if (Scene2Clock >= 2)
+	translate <0.5,DrawingHeight,0.1>
+	translate -0.07*max(Scene1Clock,0)*x
+	translate -0.1*max(Scene2Clock-Scene1Clock,0)*x
+	#if (Scene2Clock >= 20)
 		pigment { color rgbt <1, 1, 1, 1> }
 		no_shadow
 	#end
@@ -232,6 +233,9 @@ object {
 	translate <0,DrawingHeight,-0.2>
 }
 
+
+
+#if (Scene2Clock > 0)
 object {
 	Fish3d
 	rotate 90*y
@@ -242,6 +246,8 @@ object {
 	Fish3d
 	rotate 90*y
 	rotate 90*z
-	Spline_Trans(Fish2Path, max(Scene2Clock-1.6,0), z, 0.5, 0.5)
+	Spline_Trans(Fish2Path, max(Scene2Clock-2.4,0), z, 0.5, 0.5)
 }
+#end
+
 #end
