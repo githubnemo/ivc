@@ -91,10 +91,10 @@ finish {
 
 #declare Fish3d = union {
 	// Angle fins are standing off off body
-	#declare SideFinAngle = 10 * sin(clock);
+	#declare SideFinAngle = 10 * sin(2*clock);
 
 	// Waggle the tail. -15..15 looks good.
-	#declare TailFinAngle = -15 + 30*sin(clock);
+	#declare TailFinAngle = -15 + 30*sin(2*clock);
 
 	#declare FishColor = <0,0.7,1>;
 

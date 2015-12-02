@@ -119,25 +119,26 @@ object {
 	Paper(1,0.01,0)
 	translate <0, DeskHeight-0.035, 0>
 }
-// Axis
-union {
-	#declare L=8;
-	// X
-	box {
-		<0,0,0>, <L,0.1,0>
-		pigment { color Red }
-	}
-	// Y
-	box {
-		<0,0,0>, <0.1,L,0>
-		pigment { color Green }
-	}
-	// Z
-	box {
-		<0,0,0>, <0.1,0,L>
-		pigment { color Blue }
-	}
-}
+
+//// Axis
+//union {
+	//#declare L=8;
+	//// X
+	//box {
+		//<0,0,0>, <L,0.1,0>
+		//pigment { color Red }
+	//}
+	//// Y
+	//box {
+		//<0,0,0>, <0.1,L,0>
+		//pigment { color Green }
+	//}
+	//// Z
+	//box {
+		//<0,0,0>, <0.1,0,L>
+		//pigment { color Blue }
+	//}
+//}
 
 #local DrawingHeight = DeskHeight - 0.03;
 
