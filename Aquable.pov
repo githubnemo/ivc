@@ -153,15 +153,16 @@ union {
 spline {
    cubic_spline
    #declare yoff=DrawingHeight;
+   #declare zoff=-0.13;
 
    -2, <0, 0.5, 0>, // control point
    -1, <0, 0, 0>, // control point
 
-   00, < 0, yoff+-0.2, 0>, // start
-   01, < 0.25, yoff+1.125, 0>,
-   02, < 0.5, yoff+1.5, 0>, // highest point
-   03, < 0.75, yoff+1.125, 0>,
-   04, < 1, yoff+-0.2, 0>, // end
+   00, < 0, yoff+-0.2, zoff>, // start
+   01, < 0.25, yoff+1.125, zoff>,
+   02, < 0.5, yoff+1.5, zoff>, // highest point
+   03, < 0.75, yoff+1.125, zoff>,
+   04, < 1, yoff+-0.2, zoff>, // end
 
    12, < 1, 1, 0>, // control point
    13, < 1, 0, 0>, // control point
@@ -186,24 +187,27 @@ spline {
    13, < 1, 0, 0>, // control point
 }
 
-// The yellow wire that shows the spline path.
-union {
-   #declare C = 0;
-   #declare Cmax= 50;
-   #declare dv = 5;
-   #while (C<=Cmax)
-      #declare Value1 = C/Cmax*dv;
-      #declare Value2 = (C+1)/Cmax*dv;
-      #declare Point1 = Fish1Path(Value1);
-      #declare Point2 = Fish1Path(Value2);
-      sphere {Point1, 0.015}
-      cylinder {Point1, Point2, 0.01}
-      #declare C = C+1;
-   #end
-   pigment {color <1,1,0>}
+#declare Fish3Path =
+spline {
+   cubic_spline
+   #declare xoff=0.35;
+   #declare yoff=DrawingHeight;
+   #declare zoff=-0.25;
+
+   -2, <0, 0.5, 0>, // control point
+   -1, <0, 0, 0>, // control point
+
+   00, < xoff+-0.1, yoff+-0.2, zoff>, // start
+   01, < xoff+-0.25, yoff+0.1, zoff>,
+   02, < xoff+-0.3, yoff+0.3, zoff>, // highest point
+   03, < xoff+-0.35, yoff+0.1, zoff>,
+   04, < xoff+-0.5, yoff+-0.2, zoff>,
+
+   12, < 1, 1, 0>, // control point
+   13, < 1, 0, 0>, // control point
 }
 
-// The blue wire that shows the spline path.
+#macro DrawSpline(Fish2Path, Color)
 union {
    #declare C = 0;
    #declare Cmax= 50;
@@ -217,13 +221,19 @@ union {
       cylinder {Point1, Point2, 0.01}
       #declare C = C+1;
    #end
-   pigment {color <0,0,1>}
+   pigment {color Color }
 }
+#end
+
+DrawSpline(Fish1Path, <1,1,0>)
+DrawSpline(Fish2Path, <0,0,1>)
+DrawSpline(Fish3Path, <0,1,0>)
 
 #declare Boundary = difference {
 	object {
 		Paper(1,0.1,0)
 		scale 1.5
+		scale <5,1,5>
 		translate <0, DeskHeight-0.05, 0>
 	}
 	object {
@@ -254,9 +264,29 @@ BoundedThing(object {
 object {
 	Fish2d(20*sin(clock))
 	rotate <180,0,180>
-	translate <0,DrawingHeight,-0.2>
+	translate <0,DrawingHeight,-0.13>
 }
 
+BoundedThing(object {
+	Fish2d(10*sin(clock))
+	translate <0.5,DrawingHeight,-0.25>
+	translate -0.07*max(Scene1Clock,0)*x
+	translate -0.07*max(Scene2Clock,0)*x
+	#if (Scene2Clock >= 5)
+		pigment { color rgbt <1, 1, 1, 1> }
+		no_shadow
+	#end
+})
+
+BoundedThing(object {
+	Fish2d(10*sin(clock))
+	translate <0.6,DrawingHeight,-0.25>
+	translate -0.08*max(Scene2Clock-2,0)*x
+	#if (Scene2Clock > 6.2 & Scene2Clock <= 10)
+		pigment { color rgbt <1, 1, 1, 1> }
+		no_shadow
+	#end
+})
 
 
 #if (Scene2Clock > 0)
@@ -272,6 +302,14 @@ object {
 	rotate 90*z
 	Spline_Trans(Fish2Path, max(Scene2Clock-2.4,0), z, 0.5, 0.5)
 }
-#end
 
-#end
+object {
+	Fish3d
+	rotate 90*y
+	rotate 90*z
+	Spline_Trans(Fish3Path, max(Scene2Clock-6.1,0), z, 0.5, 0.5)
+}
+#end // Scene2Clock > 0
+
+
+#end // wtf2
