@@ -4,11 +4,11 @@
 #include "transforms.inc"
 #include "fishpaper.inc"
 #include "titlepage.inc"
-      
+
 #local Height = 0.5;
 #local Width = 0.75;
 #local Radius = 0.02;
-#local DeskHeight = Height + 1.027;                      
+#local DeskHeight = Height + 1.027;
 #local TitleTime = 10;
 #local PaperFocusTime = 13;
 #local TopViewElapseTime = 16;
@@ -19,39 +19,39 @@
 #local IncFadingRate = (StandardFadeDist/3)*(clock-TopViewElapseTime);
 
 
-global_settings{ambient_light rgb<0,0,0>}         
+global_settings{ambient_light rgb<0,0,0>}
 
 #if(clock < TitleTime)
     Title()
 #else
 
-#if(clock >= TitleTime & clock < TopViewElapseTime+FadingOffset)                             
-    #if(clock < PaperFocusTime)                                                 
-        camera{location <0,2.5,0> look_at <0,0,0> angle 50}    
+#if(clock >= TitleTime & clock < TopViewElapseTime+FadingOffset)
+    #if(clock < PaperFocusTime)
+        camera{location <0,2.5,0> look_at <0,0,0> angle 50}
     #end
     //Zooming upwards away from the paper -> For test purposes change the povray.ini initial_frame variable to 90 or more frames
     #if(clock >= PaperFocusTime & clock <= ZoomUpperBound)
         camera{location <0,2.5,0> look_at <0,0,0> angle 50*((clock-PaperFocusTime)+1)}
     #end
-    #if(clock > ZoomUpperBound) 
-        camera{location <0,2.5,0> look_at <0,0,0> angle 100}    
-    #end    
+    #if(clock > ZoomUpperBound)
+        camera{location <0,2.5,0> look_at <0,0,0> angle 100}
+    #end
 #else
     camera{location <0,2,-1.7> look_at <0,1,0> angle 90}
 #end
 
-//Create fading 
-#if (clock >= TitleTime & clock < ZoomUpperBound+FadingOffset)                                              
+//Create fading
+#if (clock >= TitleTime & clock < ZoomUpperBound+FadingOffset)
     light_source{<0,10,-1> color White*1.1 fade_distance StandardFadeDist fade_power 1}
 #end
-        
-#if (clock >= ZoomUpperBound+FadingOffset & clock <= TopViewElapseTime+FadingOffset) 
+
+#if (clock >= ZoomUpperBound+FadingOffset & clock <= TopViewElapseTime+FadingOffset)
 light_source{<0,10,-1> color White*1.1 fade_distance DecFadingRate fade_power 1}
 #end
 
 #if(clock > TopViewElapseTime+FadingOffset)
 light_source{<0,10,-1> color White*1.1 fade_distance mod(IncFadingRate,StandardFadeDist) fade_power 1}
-#end   
+#end
 
 //background{White}
 
@@ -59,7 +59,7 @@ plane{y,0 texture{Dark_Wood}}
 plane{z, Width/2+1 texture{pigment{White*7}}}
 
 //Include prepared Post-It image
-box{<0,0,0>,<0.5,0.005,0.5> texture{pigment{ image_map{png "Images\PostIt.png" map_type 0}}} rotate<0,-15,0> scale 0.4 translate<-0.8,Height+1,-0.55>}
+box{<0,0,0>,<0.5,0.005,0.5> texture{pigment{ image_map{png "Images/PostIt.png" map_type 0}}} rotate<0,-15,0> scale 0.4 translate<-0.8,Height+1,-0.55>}
 
 
 //Table
@@ -141,18 +141,8 @@ union {
 
 #local DrawingHeight = DeskHeight - 0.03;
 
-//Fish - 2D
-object {
-	Fish2d(10*sin(clock))
-	translate <0.1,DrawingHeight,0.1>
-	translate -0.1*clock*x
-}
-object {
-	Fish2d(20*sin(clock))
-	rotate <180,0,180>
-	translate <0,DrawingHeight,-0.2>
-}
-                               
+#declare Scene2Clock = (clock - TitleTime);
+
 
 #declare Fish1Path =
 spline {
@@ -225,16 +215,33 @@ union {
    pigment {color <0,0,1>}
 }
 
+//Fish - 2D
+object {
+	Fish2d(10*sin(clock))
+	translate <0.1,DrawingHeight,0.1>
+	translate -0.1*Scene2Clock*x
+	#if (Scene2Clock >= 2)
+		pigment { color rgbt <1, 1, 1, 1> }
+		no_shadow
+	#end
+}
+
+object {
+	Fish2d(20*sin(clock))
+	rotate <180,0,180>
+	translate <0,DrawingHeight,-0.2>
+}
+
 object {
 	Fish3d
 	rotate 90*y
-	Spline_Trans(Fish1Path, clock, z, 0.5, 0.5)
+	Spline_Trans(Fish1Path, Scene2Clock, z, 0.5, 0.5)
 }
 
 object {
 	Fish3d
 	rotate 90*y
 	rotate 90*z
-	Spline_Trans(Fish2Path, max(clock-1.6,0), z, 0.5, 0.5)
+	Spline_Trans(Fish2Path, max(Scene2Clock-1.6,0), z, 0.5, 0.5)
 }
 #end
