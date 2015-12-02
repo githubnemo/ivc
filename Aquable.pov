@@ -220,9 +220,9 @@ union {
 }
 #end
 
-DrawSpline(Fish1Path, <1,1,0>)
-DrawSpline(Fish2Path, <0,0,1>)
-DrawSpline(Fish3Path, <0,1,0>)
+//DrawSpline(Fish1Path, <1,1,0>)
+//DrawSpline(Fish2Path, <0,0,1>)
+//DrawSpline(Fish3Path, <0,1,0>)
 
 #declare Boundary = difference {
 	object {
