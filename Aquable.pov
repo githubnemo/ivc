@@ -16,7 +16,7 @@
 #local StandardFadeDist = 8;
 #local FadingOffset = 0.5; //How long to wait until beginning of fading
 #local DecFadingRate = StandardFadeDist*(1-(clock-ZoomUpperBound-FadingOffset));
-#local IncFadingRate = (StandardFadeDist/3)*(clock-TopViewElapseTime);
+#local IncFadingRate = (StandardFadeDist/3)*min(3,(clock-TopViewElapseTime));
 
 
 global_settings{ambient_light rgb<0,0,0>}
@@ -50,12 +50,7 @@ light_source{<0,10,-1> color White*1.1 fade_distance DecFadingRate fade_power 1}
 #end
 
 #if(clock > TopViewElapseTime+FadingOffset)
-    #declare fade_dist = IncFadingRate / (0.3*StandardFadeDist);
-    #if(fade_dist < 1)
-        light_source{<0,10,-1> color White*1.1 fade_distance 1 fade_power 1}
-    #else
-        light_source{<0,10,-1> color White*1.1 fade_distance fade_dist fade_power 1}
-    #end
+   light_source{<0,10,-1> color White*1.1 fade_distance IncFadingRate fade_power 1}
 #end
 
 //background{White}
