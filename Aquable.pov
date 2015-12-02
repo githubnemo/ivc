@@ -33,6 +33,9 @@ global_settings{ambient_light rgb<0,0,0>}
     #if(clock >= PaperFocusTime & clock <= ZoomUpperBound)
         camera{location <0,2.5,0> look_at <0,0,0> angle 50*((clock-PaperFocusTime)+1)}
     #end
+    #if(clock > ZoomUpperBound)                                              
+        camera{location <0,2.5,0> look_at <0,0,0> angle 100}    
+    #end    
     #if(clock > ZoomUpperBound)
         camera{location <0,2.5,0> look_at <0,0,0> angle 100}
     #end
@@ -50,6 +53,13 @@ light_source{<0,10,-1> color White*1.1 fade_distance DecFadingRate fade_power 1}
 #end
 
 #if(clock > TopViewElapseTime+FadingOffset)
+    #declare fade_dist = IncFadingRate / (0.3*StandardFadeDist);
+    #if(fade_dist < 1)
+        light_source{<0,10,-1> color White*1.1 fade_distance 1 fade_power 1}
+    #else
+        light_source{<0,10,-1> color White*1.1 fade_distance fade_dist fade_power 1}
+    #end
+#end
 light_source{<0,10,-1> color White*1.1 fade_distance mod(IncFadingRate,StandardFadeDist) fade_power 1}
 #end
 
