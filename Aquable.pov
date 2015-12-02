@@ -178,8 +178,8 @@ spline {
    03, < -0.35, yoff+0.1, zoff>,
    04, < -0.5, yoff+-0.2, zoff>,
 
-   12, < 1, 1, 0>, // control point
-   13, < 1, 0, 0>, // control point
+   12, < 0, -0.5, 0>, // control point
+   13, < 0, 0, 0>, // control point
 }
 
 #declare Fish3Path =
@@ -198,8 +198,8 @@ spline {
    03, < xoff+-0.35, yoff+0.1, zoff>,
    04, < xoff+-0.5, yoff+-0.2, zoff>,
 
-   12, < 1, 1, 0>, // control point
-   13, < 1, 0, 0>, // control point
+   12, < 0, -0.5, 0>, // control point
+   13, < 0, 0, 0>, // control point
 }
 
 #macro DrawSpline(Fish2Path, Color)
@@ -263,6 +263,10 @@ BoundedThing(object {
 	rotate <180,0,180>
 	translate <-0.8,DrawingHeight,-0.13>
 	translate 0.05*max(Scene2Clock,0)*x
+	#if (Scene2Clock >= 16)
+		pigment { color rgbt <1,1,1,1> }
+		no_shadow
+	#end
 })
 
 // Lower fish (no spline)
@@ -302,7 +306,7 @@ object {
 object {
 	Fish3d
 	rotate 90*y
-	Spline_Trans(Fish1Path, max(Scene2Clock-9.4, 0), z, 0.5, 0.5)
+	Spline_Trans(Fish1Path, 0.15*max(Scene2Clock-15, 0), z, 0.5, 0.5)
 }
 
 // Lower fish
