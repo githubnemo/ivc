@@ -164,8 +164,8 @@ spline {
    03, < 0.75, yoff+1.125, zoff>,
    04, < 1, yoff+-0.2, zoff>, // end
 
-   12, < 1, 1, 0>, // control point
-   13, < 1, 0, 0>, // control point
+   12, < 0, 1, 0>, // control point
+   13, < 0, 0, 0>, // control point
 }
 
 #declare Fish2Path =
@@ -250,6 +250,7 @@ DrawSpline(Fish3Path, <0,1,0>)
 #end
 
 //Fish - 2D
+// Upper fish (blue spline)
 BoundedThing(object {
 	Fish2d(10*sin(clock))
 	translate <0.5,DrawingHeight,0.1>
@@ -261,12 +262,15 @@ BoundedThing(object {
 	#end
 })
 
-object {
+// Middle fish (yellow spline)
+BoundedThing(object {
 	Fish2d(20*sin(clock))
 	rotate <180,0,180>
-	translate <0,DrawingHeight,-0.13>
-}
+	translate <-0.8,DrawingHeight,-0.13>
+	translate 0.05*max(Scene2Clock,0)*x
+})
 
+// Lower fish (no spline)
 BoundedThing(object {
 	Fish2d(10*sin(clock))
 	translate <0.5,DrawingHeight,-0.25>
@@ -278,6 +282,7 @@ BoundedThing(object {
 	#end
 })
 
+// Lower fish (green spline)
 BoundedThing(object {
 	Fish2d(10*sin(clock))
 	translate <0.6,DrawingHeight,-0.25>
@@ -290,12 +295,7 @@ BoundedThing(object {
 
 
 #if (Scene2Clock > 0)
-object {
-	Fish3d
-	rotate 90*y
-	Spline_Trans(Fish1Path, Scene2Clock, z, 0.5, 0.5)
-}
-
+// Upper fish
 object {
 	Fish3d
 	rotate 90*y
@@ -303,6 +303,14 @@ object {
 	Spline_Trans(Fish2Path, max(Scene2Clock-2.4,0), z, 0.5, 0.5)
 }
 
+// Middle fish
+object {
+	Fish3d
+	rotate 90*y
+	Spline_Trans(Fish1Path, max(Scene2Clock-9.4, 0), z, 0.5, 0.5)
+}
+
+// Lower fish
 object {
 	Fish3d
 	rotate 90*y
