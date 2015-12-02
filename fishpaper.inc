@@ -80,3 +80,65 @@
 		translate <-Width/2,0,-Width/sqrt(2)/2>
 	}
 #end
+
+
+#declare ShinyFinish =
+finish {
+   diffuse 0.7
+   reflection {0.1, 1.0 fresnel}
+   specular 1 roughness 0.0035 metallic
+}
+
+#declare Fish3d = union {
+	// Angle fins are standing off off body
+	#declare SideFinAngle = 10;
+
+	// Waggle the tail. -15..15 looks good.
+	#declare TailFinAngle = 0;
+
+	#declare FishColor = <0,0.7,1>;
+
+	// Body
+	sphere {
+		0 0.08
+		scale <1,0.5,0.3>
+
+		pigment {
+			rgb FishColor
+		}
+	}
+
+	// Right Fin
+	sphere {
+		0 0.03
+		scale <1, 0.5, 0.15>
+		rotate <0,-SideFinAngle,-15>
+		translate <0,-0.02,0.03>
+
+		pigment { rgb FishColor filter 0.9 }
+	}
+
+	// Left Fin
+	sphere {
+		0 0.03
+		scale <1, 0.5, 0.15>
+		rotate <0,SideFinAngle,-15>
+		translate <0,-0.02,-0.03>
+
+		pigment { rgb FishColor filter 0.9 }
+	}
+
+	// Tail Fin
+	cone {
+		<0.07, 0, 0>, 0.03, < 0, 0, 0>, 0.0001
+		scale <1,1,0.3>
+		rotate TailFinAngle*y
+		translate <0.05,0,0>
+
+		pigment { rgb FishColor }
+	}
+
+	finish { ShinyFinish }
+
+	normal { bumps 12 }
+}
