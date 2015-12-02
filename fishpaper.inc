@@ -49,11 +49,11 @@
 #declare RMF=function{ f_ridged_mf(x, y, z, 0.07, 2.2,  7, 0.6, 0.9, 1)}
 
 // Paper side width `Width`, use reflection flag `R`
-#macro Paper(Width,R)
+#macro Paper(Width,Thickness,R)
 	union {
 
 		box {
-			<0,0.01,0>, <Width,0.01,Width/sqrt(2)>
+			<0,0.0,0>, <Width,Thickness,Width/sqrt(2)>
 			pigment { White }
 			normal { bumps 0.1 }
 		}

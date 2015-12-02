@@ -33,9 +33,6 @@ global_settings{ambient_light rgb<0,0,0>}
     #if(clock >= PaperFocusTime & clock <= ZoomUpperBound)
         camera{location <0,2.5,0> look_at <0,0,0> angle 50*((clock-PaperFocusTime)+1)}
     #end
-    #if(clock > ZoomUpperBound)                                              
-        camera{location <0,2.5,0> look_at <0,0,0> angle 100}    
-    #end    
     #if(clock > ZoomUpperBound)
         camera{location <0,2.5,0> look_at <0,0,0> angle 100}
     #end
@@ -59,8 +56,6 @@ light_source{<0,10,-1> color White*1.1 fade_distance DecFadingRate fade_power 1}
     #else
         light_source{<0,10,-1> color White*1.1 fade_distance fade_dist fade_power 1}
     #end
-#end
-light_source{<0,10,-1> color White*1.1 fade_distance mod(IncFadingRate,StandardFadeDist) fade_power 1}
 #end
 
 //background{White}
@@ -126,7 +121,7 @@ union{
 
 //Paper
 object {
-	Paper(1,0)
+	Paper(1,0.01,0)
 	translate <0, DeskHeight-0.035, 0>
 }
 // Axis
@@ -225,17 +220,36 @@ union {
    pigment {color <0,0,1>}
 }
 
+#declare Boundary = difference {
+	object {
+		Paper(1,0.1,0)
+		scale 1.5
+		translate <0, DeskHeight-0.05, 0>
+	}
+	object {
+		Paper(1,0.2,0)
+		translate <0, DeskHeight-0.05, 0>
+	}
+}
+
+#macro BoundedThing(Thing)
+	difference {
+		object { Thing }
+		object { Boundary }
+	}
+#end
+
 //Fish - 2D
-object {
+BoundedThing(object {
 	Fish2d(10*sin(clock))
 	translate <0.5,DrawingHeight,0.1>
 	translate -0.07*max(Scene1Clock,0)*x
 	translate -0.03*max(Scene2Clock,0)*x
-	#if (Scene2Clock >= 3 & Scene2Clock < 4)
+	#if (Scene2Clock >= 3 & Scene2Clock < 6)
 		pigment { color rgbt <1, 1, 1, 1> }
 		no_shadow
 	#end
-}
+})
 
 object {
 	Fish2d(20*sin(clock))
