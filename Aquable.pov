@@ -100,7 +100,8 @@ union {
 //Fish - 2D
 object {
 	Fish2d(10*sin(clock))
-	translate <0,DrawingHeight,-0.1>
+	translate <0.1,DrawingHeight,0.1>
+	translate -0.1*clock*x
 }
 object {
 	Fish2d(20*sin(clock))
@@ -190,6 +191,6 @@ object {
 	Fish3d
 	rotate 90*y
 	rotate 90*z
-	Spline_Trans(Fish2Path, clock, z, 0.5, 0.5)
+	Spline_Trans(Fish2Path, max(clock-1.6,0), z, 0.5, 0.5)
 }
 
